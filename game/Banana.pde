@@ -7,6 +7,8 @@ class Banana {
   float index = 0;
   float speed;
   float increase;
+  float increment;
+  float initIncrease;
   
   /*
   * Constructor, here we set initial values, such as starting position and speed
@@ -19,8 +21,10 @@ class Banana {
     this.animation = this.setAnimation(runSheet);
     this.position = new PVector(x, y);
     
-    this.speed = 0.05;
-    this.increase = 0.05;
+    this.speed = 0;
+    this.increase = 0.005;
+    this.initIncrease = this.increase;
+    this.increment = 0.001;
     this.keyCode = key;
   }
   
@@ -60,19 +64,23 @@ class Banana {
     index += this.speed;
   }
   
-  
+  /*
+  * Increases the speed exponentially
+  */
   void increaseSpeed() {
-    this.speed += this.increase;
+    this.speed = sqrt(this.increase);
+    this.increase += this.increment;
   }
   
   /*
   * Decreases speed so that banana stops running if you stop hitting the button/banana
-  * If the speed goes under 0, it resets it to 0
+  * If the speed goes under 0, it resets speed and increase to their initial values
   */
   void decreaseSpeed() {
-    this.speed -= this.increase / 10;
+    this.speed -= this.increase / 5;
     if (this.speed < 0) {
       this.speed = 0;
+      this.increase = this.initIncrease;
     }
   }
 }

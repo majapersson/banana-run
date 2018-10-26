@@ -1,3 +1,4 @@
+int players = 2;
 
 Banana banana;
 
