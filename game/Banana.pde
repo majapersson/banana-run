@@ -14,15 +14,14 @@ class Banana {
   * Constructor, here we set initial values, such as starting position and speed
   */
   Banana(int x, int y, int key) {
-    PImage runSheet = loadImage("assets/mario_running.png");
-    
-    this.idle = loadImage("assets/mario_idle.png");
+    PImage runSheet = loadImage("assets/banana_done.png");
     
     this.animation = this.setAnimation(runSheet);
+    this.idle = animation[0];
     this.position = new PVector(x, y);
     
     this.speed = 0;
-    this.increase = 0.005;
+    this.increase = 0.01;
     this.initIncrease = this.increase;
     this.increment = 0.001;
     this.keyCode = key;
@@ -35,9 +34,10 @@ class Banana {
   * @return PImage[]
   */
   PImage[] setAnimation(PImage sheet) {
-    int spriteWidth = 17;
+    int spriteWidth = 155;
     PImage[] anim = new PImage[sheet.width / spriteWidth];
     
+    // Split array into parts depending on sprite width 
     for(int i = 0; i < sheet.width / spriteWidth; i++) {
       int x = i * spriteWidth;
       anim[i] = sheet.get(x, 0, spriteWidth, sheet.height);
@@ -59,7 +59,8 @@ class Banana {
   * @params float speed
   */
   void run() {
-    position.sub(new PVector(this.speed * 2, 0));
+    // Update position
+    //position.sub(new PVector(this.speed * 2, 0));
     image(this.animation[floor(this.index) % this.animation.length], this.position.x, this.position.y);
     index += this.speed;
   }
