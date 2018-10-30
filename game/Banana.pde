@@ -1,8 +1,11 @@
 class Banana {
   PImage[] animation;
   PImage idle;
-  PVector position;
+  
+  int width;
   int height;
+  PVector position;
+  String name;
   
   int keyCode;
   float index = 0;
@@ -14,13 +17,15 @@ class Banana {
   /*
   * Constructor, here we set initial values, such as starting position and speed
   */
-  Banana(int x, int y, int key) {
-    PImage runSheet = loadImage("assets/banana_done.png");
+  Banana(String name, int x, int y, int key) {
+    PImage runSheet = loadImage("banana_done.png");
     
     this.animation = this.setAnimation(runSheet);
     this.idle = animation[0];
     this.position = new PVector(x, y);
+    this.width = 156;
     this.height = 197;
+    this.name = name;
     
     this.speed = 0;
     this.increase = 0.01;
