@@ -2,6 +2,7 @@ class Banana {
   PImage[] animation;
   PImage idle;
   PVector position;
+  int height;
   
   int keyCode;
   float index = 0;
@@ -19,6 +20,7 @@ class Banana {
     this.animation = this.setAnimation(runSheet);
     this.idle = animation[0];
     this.position = new PVector(x, y);
+    this.height = 197;
     
     this.speed = 0;
     this.increase = 0.01;
@@ -60,7 +62,7 @@ class Banana {
   */
   void run() {
     // Update position
-    //position.sub(new PVector(this.speed * 2, 0));
+    position.add(new PVector(this.speed * 10, 0));
     image(this.animation[floor(this.index) % this.animation.length], this.position.x, this.position.y);
     index += this.speed;
   }
