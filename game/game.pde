@@ -10,7 +10,7 @@ void setup() {
   size(800, 800);
   int spriteHeight = 197;
   
-  //port = new Serial(this, Serial.list()[2], 9600);
+  port = new Serial(this, Serial.list()[0], 9600);
   
   for(int i = 0; i < players; i++) {
    bananas[i] = new Banana(0, height / 2 - spriteHeight + spriteHeight * i, keys[i]);
@@ -20,19 +20,16 @@ void setup() {
 void draw() {
   background(255);
   
-  //if (port.available() > 0) {
-  //  while (port.available() > 0) {
+  if (port.available() > 0) {
+    while (port.available() > 0) {
       
-  //   String val = port.readStringUntil(10);
-  //   if (val != null) {
-  //     val = trim(val);
-       
-  //     if (val.equals("0")) {
-  //       banana.increaseSpeed();
-  //     }
-  //   }
-  //  }
-  //}
+     String value = port.readStringUntil(10);
+     if (value != null) {
+       int val =Integer.parseInt(trim(value));
+       bananas[val].increaseSpeed();
+     }
+    }
+  }
   
   for(int i = 0; i < players; i++) {
     if (bananas[i].speed != 0) {
