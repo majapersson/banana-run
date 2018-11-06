@@ -1,10 +1,5 @@
 import processing.serial.*;
 
-int startTimeMs;
-final int startDelayMs = 3000;
-boolean atStartup = true;
-boolean startGame = false;
-
 // Banana variables
 Serial port;
 int players = 2;
@@ -12,11 +7,18 @@ Banana[] bananas = new Banana[players];
 int[] keys = {32, 10};
 Banana winner;
 
-// Background and UI variables
+// Background variables
 BackgroundImage backgroundImage;
 Track track;
 UI UI;
 float startPosition = 0;
+
+// UI variables
+int startTimeMs;
+final int startDelayMs = 4000;
+boolean atStartup = true;
+boolean startGame = false;
+boolean endGame = false;
 
 void setup() {
   fullScreen();
@@ -37,11 +39,10 @@ void setup() {
   for (int i = 0; i < players; i++) {
     bananas[i] = new Banana("Banana " + str(i + 1), 0, height - spriteHeight * (bananas.length - i), keys[i]);
   }
-  startTimeMs = millis();
 }
 
 void draw() {
-  if(!startGame) {
+  if (!startGame) {
     UI.startScreen();
     return;
   }
@@ -57,14 +58,12 @@ void draw() {
     return;
   }
 
-
-  background(255);
+  // Move screen and set images
   translate(-startPosition, 0);
   track.setTrack();
-
-  // Background image functions
   backgroundImage.display(track);
 
+  // Listen to ports
   //if (port.available() > 0) {
   //  while (port.available() > 0) {
 
@@ -76,6 +75,7 @@ void draw() {
   //  }
   //}
 
+  // Game loop for every banana
   for (int i = 0; i < bananas.length; i++) {
     if (bananas[i].speed != 0) {
       bananas[i].run();
@@ -88,7 +88,6 @@ void draw() {
 
     // If any banana crosses the finish line, break loop
     if ( middle >= track.length) {
-      noLoop();
       winner = bananas[i];
       UI.endScreen();
       break;
@@ -96,7 +95,8 @@ void draw() {
 
     bananas[i].decreaseSpeed();
   }
-
+  
+  // Set leader
   if (bananas[0].position.x > bananas[1].position.x) {
     winner = bananas[0];
   }
@@ -104,6 +104,7 @@ void draw() {
     winner = bananas[1];
   }
 
+  // Declare winner!!
   if (winner != null) {
     if (winner.position.x  >= width / 2) {
       startPosition += winner.speed * 20;
@@ -115,6 +116,14 @@ void draw() {
 void keyPressed() {
   if (!startGame) {
     startGame = true;
+    startTimeMs = millis();
+  }
+  
+  if (endGame) {
+    endGame = false;
+    startTimeMs = millis();
+    atStartup = true;
+    loop();
   }
   
   for (int i = 0; i < bananas.length; i++) {

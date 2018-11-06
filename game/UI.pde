@@ -7,7 +7,6 @@ class UI {
   }
   
   void startScreen() {
-    noLoop();
     background(0);
     textSize(100);
     fill(255);
@@ -24,17 +23,32 @@ class UI {
     textAlign(CENTER, CENTER);
     // Show the remaining time, in seconds;
     // show n when there are n or fewer seconds remaining.
-    text(ceil(remainingTimeMs/1000.0), width / 2, height / 2);
+    if (remainingTimeMs < 2999) {
+      text(ceil(remainingTimeMs/1000.0), width / 2, height / 2);
+    }
+    for (int i = 0; i < bananas.length; i++) {
+      bananas[i].speed = 0;
+    }
   }
   
   void endScreen() {
-    translate(startPosition, 0);
-    delay(500);
+    noLoop();
     background(0);
+    translate(startPosition, 0);
+    for (int i = 0; i < bananas.length; i++) {
+      bananas[i].position.x = 0;
+      bananas[i].speed = 0;
+    }
+    backgroundImage.x = 0;
+    startPosition = 0;
+    delay(500);
     fill(255);
-    textSize(50);
+    textSize(100);
     textAlign(CENTER);
     text(winner.name + " wins!", width / 2, height / 2);
+    textSize(50);
+    text("Slap any banana to play again", width / 2, height - 100);
+    endGame = true;
   }
 
 }

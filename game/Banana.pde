@@ -67,7 +67,7 @@ class Banana {
   */
   void run() {
     // Update position
-    position.add(new PVector(this.speed * 20, 0));
+    position.add(new PVector(this.speed * 100, 0));
     image(this.animation[floor(this.index) % this.animation.length], this.position.x, this.position.y);
     index += this.speed;
   }
