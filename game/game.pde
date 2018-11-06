@@ -1,4 +1,5 @@
 import processing.serial.*;
+import processing.sound.*;
 
 // Banana variables
 Serial port;
@@ -6,6 +7,12 @@ int players = 2;
 Banana[] bananas = new Banana[players];
 int[] keys = {32, 10};
 Banana winner;
+
+//sound test1
+SoundFile file;
+  //put your audio file name here
+  String audioName = "data/winnerMusic.mp3";
+  String path;
 
 // Background variables
 BackgroundImage backgroundImage;
@@ -27,6 +34,12 @@ void setup() {
 
   // Set background image
   backgroundImage = new BackgroundImage();
+  
+  //sound test1
+  path = sketchPath(audioName);
+    file = new SoundFile(this, path);
+    file.play();
+
 
   // Set track length and load UI
   track = new Track(floor(width * 1.5));
@@ -42,6 +55,8 @@ void setup() {
 }
 
 void draw() {
+  
+  
   if (!startGame) {
     UI.startScreen();
     return;
