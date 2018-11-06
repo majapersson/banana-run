@@ -29,7 +29,7 @@ void setup() {
   backgroundImage = new BackgroundImage();
 
   // Set track length and load UI
-  track = new Track(1000);
+  track = new Track(floor(width * 1.5));
   UI = new UI();
 
   // Set which port to listen to
@@ -69,6 +69,18 @@ void draw() {
 
   //   String value = port.readStringUntil(10);
   //   if (value != null) {
+    
+  //     if (!startGame) {
+  //       startGame = true;
+  //       startTimeMs = millis();
+  //     }
+       
+  //     if (endGame) {
+  //       endGame = false;
+  //       startTimeMs = millis();
+  //       atStartup = true;
+  //       loop();
+  //     }
   //     int index = Integer.parseInt(trim(value));
   //     bananas[index].increaseSpeed();
   //   }
@@ -106,8 +118,8 @@ void draw() {
 
   // Declare winner!!
   if (winner != null) {
-    if (winner.position.x  >= width / 2) {
-      startPosition += winner.speed * 20;
+    if (winner.position.x + winner.width / 2 >= width / 2) {
+      startPosition += winner.speed * 50;
       backgroundImage.move(winner.speed);
     }
   }

@@ -1,25 +1,32 @@
 class UI {
   PFont font;
+  PImage logo;
   
   UI () {
     this.font = createFont("Pixel Emulator", 50);
     textFont(this.font);
+    colorMode(HSB, 360, 100, 100);
+    this.logo = loadImage("bananarunlogo.png");
   }
   
   void startScreen() {
     background(0);
     textSize(100);
-    fill(255);
+    fill(0, 0, 100);
+    image(this.logo, width / 2 - this.logo.width / 2, height / 2 - this.logo.height);
     textAlign(CENTER, CENTER);
-    text("BANANA RUN", width / 2, height / 2 - 100);
     textSize(50);
-    text("Slap any banana to start", width / 2, height / 2 + 50);
+    text("Slap any banana to start", width / 2, height / 2 + 150);
   }
   
   void countScreen(int remainingTimeMs) {
-    background(50);
+    if (remainingTimeMs < 1000) {
+     background(139, 80, 57);
+    } else {
+     background(352, 80, 57);
+    }
     textSize(100);
-    fill(0);
+    fill(0, 0, 100);
     textAlign(CENTER, CENTER);
     // Show the remaining time, in seconds;
     // show n when there are n or fewer seconds remaining.
@@ -33,6 +40,7 @@ class UI {
   
   void endScreen() {
     noLoop();
+    
     background(0);
     translate(startPosition, 0);
     for (int i = 0; i < bananas.length; i++) {
@@ -42,12 +50,13 @@ class UI {
     backgroundImage.x = 0;
     startPosition = 0;
     delay(500);
-    fill(255);
+    fill(0, 0, 100);
     textSize(100);
     textAlign(CENTER);
     text(winner.name + " wins!", width / 2, height / 2);
     textSize(50);
     text("Slap any banana to play again", width / 2, height - 100);
+    
     endGame = true;
   }
 
