@@ -15,7 +15,7 @@ class Track {
   }
   
   /*
-  * Loop througsh images and add them tso the scene
+  * Loop through images and add them to the scene
   */
   void setTrack() {
     image(this.startline, 0, height - this.startline.height);

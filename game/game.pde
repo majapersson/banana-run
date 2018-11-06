@@ -5,6 +5,7 @@ Serial port;
 int players = 2;
 Banana[] bananas = new Banana[players];
 int[] keys = {32, 10};
+Banana winner;
 
 // Background and UI variables
 Track track;
@@ -15,11 +16,11 @@ void setup() {
   int spriteHeight = 197;
   
   // Set track length and load font for UI
-  track = new Track(750);
+  track = new Track(1000);
   font = createFont("Pixel Emulator", 50);
   textFont(font);
   
-  // Set wich port to listen to
+  // Set which port to listen to
   port = new Serial(this, Serial.list()[0], 9600);
   
   // Create bananas :)
@@ -30,6 +31,7 @@ void setup() {
 
 void draw() {
   background(255);
+  translate(-startPosition, 0);
   track.setTrack();
   
   if (port.available() > 0) {
@@ -37,13 +39,13 @@ void draw() {
       
      String value = port.readStringUntil(10);
      if (value != null) {
-       int val =Integer.parseInt(trim(value));
-       bananas[val].increaseSpeed();
+       int index = Integer.parseInt(trim(value));
+       bananas[index].increaseSpeed();
      }
     }
   }
   
-  for(int i = 0; i < players; i++) {
+  for(int i = 0; i < bananas.length; i++) {
     if (bananas[i].speed != 0) {
       bananas[i].run();
     } else {
@@ -56,25 +58,27 @@ void draw() {
     // If any banana crosses the finish line, break loop
     if ( middle >= track.length) {
       noLoop();
-      endGame(bananas[i].name);
+      winner = bananas[i];
+      endGame();
+      break;
     }
-    
+
     bananas[i].decreaseSpeed();
   }
 }
 
 void keyPressed() {
-  for(int i = 0; i < players; i++) {
+  for(int i = 0; i < bananas.length; i++) {
     if (keyCode == bananas[i].keyCode) {
       bananas[i].increaseSpeed();
     }
   }
 }
 
-void endGame(String winner) {
+void endGame() {
   delay(500);
   background(0);
   fill(255);
   textAlign(CENTER);
-  text(winner + " wins!", width / 2, height / 2);
+  text(winner.name + " wins!", width / 2, height / 2);
 }
