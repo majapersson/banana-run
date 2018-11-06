@@ -19,8 +19,8 @@ class BackgroundImage {
 
   void move(float speed) {
     x = x + speed;
-    if (x < -400) {
-      x = -400;
+    if (x < -bg.width) {
+      x = -bg.width;
     }
   }
 }
