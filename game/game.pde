@@ -8,12 +8,18 @@ int[] keys = {32, 10};
 Banana winner;
 
 // Background and UI variables
+PImage bg;
+BackgroundImage backgroundImage;
 Track track;
 PFont font;
 
 void setup() {
   size(800, 600);
+  bg=loadImage("paintBg.png");
   int spriteHeight = 197;
+  
+  //set background image
+  backgroundImage = new BackgroundImage();
   
   // Set track length and load font for UI
   track = new Track(1000);
@@ -33,6 +39,10 @@ void draw() {
   background(255);
   translate(-startPosition, 0);
   track.setTrack();
+  
+  //background image functions
+  backgroundImage.display();
+  backgroundImage.move();
   
   if (port.available() > 0) {
     while (port.available() > 0) {
