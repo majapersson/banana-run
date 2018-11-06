@@ -11,12 +11,12 @@ Banana winner;
 BackgroundImage backgroundImage;
 Track track;
 PFont font;
-int startPosition = 0;
-int sceneWidth;
+float startPosition = 0;
 
 void setup() {
   size(800, 600);
   int spriteHeight = 197;
+  surface.setTitle("Banana Run");
   
   //set background image
   backgroundImage = new BackgroundImage();
@@ -36,8 +36,8 @@ void setup() {
 }
 
 void draw() {
-  background(255);
-  translate(startPosition, 0);
+  background(0);
+  translate(-startPosition, 0);
   track.setTrack();
   
   //background image functions
@@ -83,8 +83,8 @@ void draw() {
   }
   
   if (winner != null) {
-    if (winner.position.x > width / 2 - winner.width) {
-      startPosition -= winner.speed * 10;
+    if (winner.position.x  >= width / 2) {
+      startPosition += winner.speed * 20;
       backgroundImage.move(winner.speed);
     }
   }
@@ -99,6 +99,7 @@ void keyPressed() {
 }
 
 void endGame() {
+  translate(startPosition, 0);
   delay(500);
   background(0);
   fill(255);
