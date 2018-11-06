@@ -1,25 +1,26 @@
 class BackgroundImage {
+  PImage bg;
   float x=0;
   float y =0;
-  float speed = 5;
-  int state=0;
+  
+  BackgroundImage() {
+    bg = loadImage("paintBg.png");
+  }
 
   //display the background
-  void display() {
+  void display(Track track) {
 
     noStroke();
     //imageMode(CENTER);
-    image(bg, x, y, 600, 200);
+    for (float i = x; i < track.length + width / 2 + bg.width / 2; i += bg.width) {
+      image(bg, i, y, bg.width, height - track.finishline.height);
+    }
   }
 
-  void move() {
-    //if the state is 0, move to the right
-    if (state == 0) {
-      x = x + speed;
-      if (x > width-400) {
-        x = width-400;
-        //state=1;
-      }
+  void move(float speed) {
+    x = x + speed;
+    if (x < -400) {
+      x = -400;
     }
   }
 }

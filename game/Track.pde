@@ -19,7 +19,7 @@ class Track {
   */
   void setTrack() {
     image(this.startline, 0, height - this.startline.height);
-    for (int i = this.track.width; i < this.length; i += this.track.width) {
+    for (int i = this.track.width; i < this.length + width / 2; i += this.track.width) {
       image(this.track, i, height - this.track.height);
     }
     image(this.finishline, this.length, height - this.finishline.height);

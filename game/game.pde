@@ -8,14 +8,14 @@ int[] keys = {32, 10};
 Banana winner;
 
 // Background and UI variables
-PImage bg;
 BackgroundImage backgroundImage;
 Track track;
 PFont font;
+int startPosition = 0;
+int sceneWidth;
 
 void setup() {
   size(800, 600);
-  bg=loadImage("paintBg.png");
   int spriteHeight = 197;
   
   //set background image
@@ -37,12 +37,11 @@ void setup() {
 
 void draw() {
   background(255);
-  translate(-startPosition, 0);
+  translate(startPosition, 0);
   track.setTrack();
   
   //background image functions
-  backgroundImage.display();
-  backgroundImage.move();
+  backgroundImage.display(track);
   
   if (port.available() > 0) {
     while (port.available() > 0) {
@@ -74,6 +73,20 @@ void draw() {
     }
 
     bananas[i].decreaseSpeed();
+  }
+  
+  if (bananas[0].position.x > bananas[1].position.x) {
+    winner = bananas[0];
+  }
+  if (bananas[0].position.x < bananas[1].position.x) {
+    winner = bananas[1];
+  }
+  
+  if (winner != null) {
+    if (winner.position.x > width / 2 - winner.width) {
+      startPosition -= winner.speed * 10;
+      backgroundImage.move(winner.speed);
+    }
   }
 }
 
