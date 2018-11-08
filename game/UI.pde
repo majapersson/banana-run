@@ -20,12 +20,16 @@ class UI {
   }
   
   void countScreen(int remainingTimeMs) {
+    background(0);
     if (remainingTimeMs < 1000) {
-     background(139, 80, 57);
+     background(81, 80, 90);
+    } else if (remainingTimeMs < 2000) {
+      background(54, 80, 90);
     } else {
-     background(352, 80, 57);
+     background(352, 80, 90);
     }
     textSize(100);
+    noStroke();
     fill(0, 0, 100);
     textAlign(CENTER, CENTER);
     // Show the remaining time, in seconds;
@@ -41,7 +45,7 @@ class UI {
   void endScreen() {
     noLoop();
     
-    background(0);
+    background(random(0, 360), 100, 50);
     translate(startPosition, 0);
     for (int i = 0; i < bananas.length; i++) {
       bananas[i].position.x = 0;
@@ -56,6 +60,7 @@ class UI {
     text(winner.name + " wins!", width / 2, height / 2);
     textSize(50);
     text("Slap any banana to play again", width / 2, height - 100);
+    delay(1000);
     
     endGame = true;
   }
