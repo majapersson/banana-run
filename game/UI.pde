@@ -10,6 +10,9 @@ class UI {
   }
   
   void startScreen() {
+    if (!menumusic.isLooping()) {
+      menumusic.loop();
+    }
     background(0);
     textSize(100);
     fill(0, 0, 100);
@@ -20,6 +23,8 @@ class UI {
   }
   
   void countScreen(int remainingTimeMs) {
+    menumusic.pause();
+    menumusic.rewind();
     background(0);
     if (remainingTimeMs < 1000) {
      background(81, 80, 90);
@@ -34,6 +39,9 @@ class UI {
     textAlign(CENTER, CENTER);
     // Show the remaining time, in seconds;
     // show n when there are n or fewer seconds remaining.
+    if (remainingTimeMs < 3500) {
+      countdown.play();
+    }
     if (remainingTimeMs < 2999) {
       text(ceil(remainingTimeMs/1000.0), width / 2, height / 2);
     }
@@ -43,9 +51,7 @@ class UI {
   }
   
   void endScreen() {
-    noLoop();
     
-    background(random(0, 360), 100, 50);
     translate(startPosition, 0);
     for (int i = 0; i < bananas.length; i++) {
       bananas[i].position.x = 0;
@@ -53,7 +59,14 @@ class UI {
     }
     backgroundImage.x = 0;
     startPosition = 0;
-    delay(500);
+    delay(200);
+  
+    runmusic.pause();
+    runmusic.rewind();
+    
+    menumusic.loop();
+    background(random(0, 360), 100, 70);
+  
     fill(0, 0, 100);
     textSize(100);
     textAlign(CENTER);
@@ -61,7 +74,7 @@ class UI {
     textSize(50);
     text("Slap any banana to play again", width / 2, height - 100);
     delay(1000);
-    
+      
     endGame = true;
   }
 

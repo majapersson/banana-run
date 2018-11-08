@@ -1,9 +1,4 @@
 import ddf.minim.*;
-import ddf.minim.analysis.*;
-import ddf.minim.effects.*;
-import ddf.minim.signals.*;
-import ddf.minim.spi.*;
-import ddf.minim.ugens.*;
 
 import processing.serial.*;
 
@@ -34,6 +29,9 @@ boolean atStartup = true;
 boolean startGame = false;
 boolean endGame = false;
 
+int allowInput = 0;
+int delayInput = 3000;
+
 void setup() {
   fullScreen();
   int spriteHeight = 197;
@@ -48,15 +46,9 @@ void setup() {
   countdown = minim.loadFile("countdown.mp3");
   runmusic = minim.loadFile("runMusic.mp3");
 
-  //Play the music by calling it's play function in setup.
-  menumusic.play();
-
-  //if calling and re-playing music somewhere else, both rewind and play function is needed
-  //menumusic.rewind();
-  //menumusic.play();
-
   // Set track length and load UI
-  track = new Track(floor(width * 1.5));
+  //track = new Track(floor(width * 1.5));
+  track = new Track(300);
   UI = new UI();
 
   // Set which port to listen to
@@ -66,9 +58,16 @@ void setup() {
   for (int i = 0; i < players; i++) {
     bananas[i] = new Banana("Banana " + str(i + 1), 0, height - spriteHeight * (bananas.length - i), keys[i]);
   }
+  
+  allowInput = millis() + delayInput;
 }
 
 void draw() {
+  
+  if (endGame) {
+    UI.endScreen();
+    return;
+  }
 
   if (!startGame) {
     UI.startScreen();
@@ -84,6 +83,11 @@ void draw() {
     atStartup = startupTimeRemainingMs > 0;
     // Short-circuit if we're still in the startup phase.
     return;
+  }
+  countdown.pause();
+  countdown.rewind();
+  if (!runmusic.isLooping()) {
+    runmusic.loop();
   }
 
   // Move screen and set images
@@ -130,6 +134,7 @@ void draw() {
     if ( middle >= track.length) {
       winner = bananas[i];
       UI.endScreen();
+      allowInput = millis() + delayInput;
       break;
     }
 
@@ -154,16 +159,15 @@ void draw() {
 }
 
 void keyPressed() {
-  if (!startGame) {
+  if (!startGame && allowInput <= millis()) {
     startGame = true;
     startTimeMs = millis();
   }
 
-  if (endGame) {
+  if (endGame && allowInput <= millis()) {
     endGame = false;
     startTimeMs = millis();
     atStartup = true;
-    loop();
   }
 
   for (int i = 0; i < bananas.length; i++) {
