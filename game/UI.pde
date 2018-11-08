@@ -10,7 +10,7 @@ class UI {
   }
   
   void startScreen() {
-    if (!menumusic.isLooping()) {
+    if (!menumusic.isPlaying()) {
       menumusic.loop();
     }
     background(0);
@@ -19,7 +19,9 @@ class UI {
     image(this.logo, width / 2 - this.logo.width / 2, height / 2 - this.logo.height);
     textAlign(CENTER, CENTER);
     textSize(50);
-    text("Slap any banana to start", width / 2, height / 2 + 150);
+    if (allowInput <= millis()){
+     text("Slap any banana to start", width / 2, height / 2 + 150);
+    }
   }
   
   void countScreen(int remainingTimeMs) {
@@ -51,8 +53,6 @@ class UI {
   }
   
   void endScreen() {
-    
-    translate(startPosition, 0);
     for (int i = 0; i < bananas.length; i++) {
       bananas[i].position.x = 0;
       bananas[i].speed = 0;
@@ -64,7 +64,9 @@ class UI {
     runmusic.pause();
     runmusic.rewind();
     
-    menumusic.loop();
+    if (!menumusic.isPlaying()) {
+      menumusic.loop();
+    }
     background(random(0, 360), 100, 70);
   
     fill(0, 0, 100);
@@ -72,7 +74,9 @@ class UI {
     textAlign(CENTER);
     text(winner.name + " wins!", width / 2, height / 2);
     textSize(50);
-    text("Slap any banana to play again", width / 2, height - 100);
+    if (allowInput <= millis()){
+      text("Slap any banana to play again", width / 2, height - 100);
+    }
     delay(1000);
       
     endGame = true;

@@ -17,11 +17,11 @@ class Track {
   /*
   * Loop through images and add them to the scene
   */
-  void setTrack() {
-    image(this.startline, 0, height - this.startline.height);
+  void setTrack(float startPosition) {
+    image(this.startline, 0 - startPosition, height - this.startline.height);
     for (int i = this.track.width; i < this.length + width / 2; i += this.track.width) {
-      image(this.track, i, height - this.track.height);
+      image(this.track, i - startPosition, height - this.track.height);
     }
-    image(this.finishline, this.length, height - this.finishline.height);
+    image(this.finishline, this.length - startPosition, height - this.finishline.height);
   }
 }

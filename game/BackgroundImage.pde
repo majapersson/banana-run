@@ -8,9 +8,9 @@ class BackgroundImage {
   }
 
   // Display the background
-  void display(Track track) {
+  void display(Track track, float startPosition) {
     bg.resize(0, height - track.finishline.height);
-    for (float i = x; i < track.length + width / 2 + bg.width / 2; i += bg.width) {
+    for (float i = x - startPosition; i < track.length + width / 2 + bg.width / 2; i += bg.width) {
       image(bg, i, y, bg.width, bg.height);
     }
   }

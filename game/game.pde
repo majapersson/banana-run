@@ -30,10 +30,11 @@ boolean startGame = false;
 boolean endGame = false;
 
 int allowInput = 0;
-int delayInput = 3000;
+int delayInput = 2000;
 
 void setup() {
   fullScreen();
+  frameRate(30);
   int spriteHeight = 197;
   surface.setTitle("Banana Run");
 
@@ -47,12 +48,11 @@ void setup() {
   runmusic = minim.loadFile("runMusic.mp3");
 
   // Set track length and load UI
-  //track = new Track(floor(width * 1.5));
-  track = new Track(300);
+  track = new Track(floor(width * 1.5));
   UI = new UI();
 
   // Set which port to listen to
-  //port = new Serial(this, Serial.list()[0], 9600);
+  port = new Serial(this, Serial.list()[2], 9600);
 
   // Create bananas :)
   for (int i = 0; i < players; i++) {
@@ -63,6 +63,30 @@ void setup() {
 }
 
 void draw() {
+  
+  // Listen to ports
+  if (port.available() > 0) {
+    while (port.available() > 0) {
+
+     String value = port.readStringUntil(10);
+     if (value != null) {
+
+       if (!startGame && allowInput <= millis()) {
+         startGame = true;
+         startTimeMs = millis();
+       }
+
+       if (endGame && allowInput <= millis()) {
+         endGame = false;
+         startTimeMs = millis();
+         atStartup = true;
+         loop();
+       }
+       int index = Integer.parseInt(trim(value));
+       bananas[index].increaseSpeed();
+     }
+    }
+  }
   
   if (endGame) {
     UI.endScreen();
@@ -86,38 +110,13 @@ void draw() {
   }
   countdown.pause();
   countdown.rewind();
-  if (!runmusic.isLooping()) {
+  if (!runmusic.isPlaying()) {
     runmusic.loop();
   }
 
   // Move screen and set images
-  translate(-startPosition, 0);
-  track.setTrack();
-  backgroundImage.display(track);
-
-  // Listen to ports
-  //if (port.available() > 0) {
-  //  while (port.available() > 0) {
-
-  //   String value = port.readStringUntil(10);
-  //   if (value != null) {
-
-  //     if (!startGame) {
-  //       startGame = true;
-  //       startTimeMs = millis();
-  //     }
-
-  //     if (endGame) {
-  //       endGame = false;
-  //       startTimeMs = millis();
-  //       atStartup = true;
-  //       loop();
-  //     }
-  //     int index = Integer.parseInt(trim(value));
-  //     bananas[index].increaseSpeed();
-  //   }
-  //  }
-  //}
+  track.setTrack(startPosition);
+  backgroundImage.display(track, startPosition);
 
   // Game loop for every banana
   for (int i = 0; i < bananas.length; i++) {
@@ -130,11 +129,11 @@ void draw() {
     // Banana sprites middle position
     float middle = bananas[i].position.x + bananas[i].width / 2;
 
-    // If any banana crosses the finish line, break loop
+    // Declare winner!!
     if ( middle >= track.length) {
       winner = bananas[i];
-      UI.endScreen();
       allowInput = millis() + delayInput;
+      UI.endScreen();
       break;
     }
 
@@ -149,7 +148,7 @@ void draw() {
     winner = bananas[1];
   }
 
-  // Declare winner!!
+  // Increment background movement
   if (winner != null) {
     if (winner.position.x + winner.width / 2 >= width / 2) {
       startPosition += winner.speed * 50;
@@ -158,21 +157,21 @@ void draw() {
   }
 }
 
-void keyPressed() {
-  if (!startGame && allowInput <= millis()) {
-    startGame = true;
-    startTimeMs = millis();
-  }
+//void keyPressed() {
+//  if (!startGame && allowInput <= millis()) {
+//    startGame = true;
+//    startTimeMs = millis();
+//  }
 
-  if (endGame && allowInput <= millis()) {
-    endGame = false;
-    startTimeMs = millis();
-    atStartup = true;
-  }
+//  if (endGame && allowInput <= millis()) {
+//    endGame = false;
+//    startTimeMs = millis();
+//    atStartup = true;
+//  }
 
-  for (int i = 0; i < bananas.length; i++) {
-    if (keyCode == bananas[i].keyCode) {
-      bananas[i].increaseSpeed();
-    }
-  }
-}
+//  for (int i = 0; i < bananas.length; i++) {
+//    if (keyCode == bananas[i].keyCode) {
+//      bananas[i].increaseSpeed();
+//    }
+//  }
+//}
